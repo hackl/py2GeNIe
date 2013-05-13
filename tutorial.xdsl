@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<smile version="1.0" id="Network" numsamples="1000" discsamples="10000">
+	<nodes>
+		<!-- create node "Success" -->
+		<cpt id="Success" >
+			<!-- setting names of outcomes -->
+			<state id="Success" />
+			<state id="Failure" />
+			<!-- setting probabilities -->
+			<probabilities>0.1 0.9 </probabilities>
+		</cpt>
+		<!-- create node "Forecast" -->
+		<cpt id="Forecast" >
+			<!-- setting names of outcomes -->
+			<state id="Good" />
+			<state id="Moderate" />
+			<state id="Poor" />
+			<!-- add arcs -->
+			<parents>Success </parents>
+			<!-- setting probabilities -->
+			<probabilities>0.4 0.4 0.2 0.1 0.3 0.6 </probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="SMILE Jan 29 2013" name="Network" faultnameformat="nodestate">
+			<node id="Success">
+				<name>Success</name>
+				<interior color="cc99ff" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>50 10 175 75</position>
+				<barchart active="true" width="125" height="65" />
+			</node>
+			<node id="Forecast">
+				<name>Forecast</name>
+				<interior color="ff0000" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>50 150 175 215</position>
+				<barchart active="true" width="125" height="65" />
+			</node>
+		</genie>
+	</extensions>
+</smile>
