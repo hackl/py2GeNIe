@@ -1,0 +1,216 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. Tutorial &mdash; py2GeNIe 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="py2GeNIe 1.0 documentation" href="index.html" />
+    <link rel="next" title="3. Python Code" href="code.html" />
+    <link rel="prev" title="1. Introduction" href="README.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="code.html" title="3. Python Code"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="README.html" title="1. Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">py2GeNIe 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tutorial">
+<span id="chap-tutorial"></span><h1>2. Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial is based on <a class="reference external" href="http://genie.sis.pitt.edu/wiki/Java_Tutorials:_Tutorial_1:_Creating_a_Bayesian_Network">Java Tutorial 1 Creating a Bayesian Network</a>:</p>
+<div class="section" id="creating-a-bayesian-network">
+<h2>2.1. Creating a Bayesian Network<a class="headerlink" href="#creating-a-bayesian-network" title="Permalink to this headline">¶</a></h2>
+<p>The first step is the initialization of the network.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Create a Network</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now the nodes for the Bayesian Network can be created.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Create Node &#39;Success&#39;</span>
+<span class="n">success</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s">&#39;Success&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This node should have two states. Let us name them Success and Failure.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Setting number (and name) of outcomes</span>
+<span class="n">success</span><span class="o">.</span><span class="n">addOutcome</span><span class="p">(</span><span class="s">&#39;Success&#39;</span><span class="p">)</span>
+<span class="n">success</span><span class="o">.</span><span class="n">addOutcome</span><span class="p">(</span><span class="s">&#39;Failure&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The number and name of the outcomes belongs to the definition of the node. We
+can (and must) define them before any useful inference can be made on the
+network. Following the same procedure for the node Forecast, we create a new
+node and let it have three states:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Create node &#39;Forecast&#39;</span>
+<span class="n">forecast</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s">&#39;Forecast&#39;</span><span class="p">)</span>
+
+<span class="c"># Setting number (and name) of outcomes</span>
+<span class="n">forecast</span><span class="o">.</span><span class="n">addOutcome</span><span class="p">(</span><span class="s">&#39;Good&#39;</span><span class="p">)</span>
+<span class="n">forecast</span><span class="o">.</span><span class="n">addOutcome</span><span class="p">(</span><span class="s">&#39;Moderate&#39;</span><span class="p">)</span>
+<span class="n">forecast</span><span class="o">.</span><span class="n">addOutcome</span><span class="p">(</span><span class="s">&#39;Poor&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can do this also in one step:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Setting number (and name) of outcomes</span>
+<span class="n">forecast</span><span class="o">.</span><span class="n">addOutcomes</span><span class="p">([</span><span class="s">&#39;Good&#39;</span><span class="p">,</span><span class="s">&#39;Moderate&#39;</span><span class="p">,</span><span class="s">&#39;Poor&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Now, we can add an arc from Success to Forecast to represent the conditional
+dependence of the latter on the former.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Add arc from &#39;Success&#39; to &#39;Forecast&#39;</span>
+<span class="n">arc</span> <span class="o">=</span> <span class="n">Arc</span><span class="p">(</span><span class="n">success</span><span class="p">,</span><span class="n">forecast</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we need to fill in the distribution of the nodes. We know that the node
+Success has two states and no parents, so we just need two numbers that
+represent the probability of each of the states coming true.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Conditional distribution for node &#39;Success&#39;</span>
+<span class="n">success</span><span class="o">.</span><span class="n">setProbabilities</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.9</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Now we have to fill the distribution of the node Forecast conditioned on the
+node Success. Definition matrix in this case, will have two dimensions: one
+for the states of the parent (Success) and one for the states of the child
+(Forecast).</p>
+<p>If you not sure about the size of the matrix, you can check the size with
+<tt class="docutils literal"><span class="pre">forecast.getTableSize()</span></tt>.</p>
+<p>The order of these probabilities is given by considering the state of the
+first parent of the node as the most significant (thinking of the coordinates
+in terms of bits) coordinate, then the second parent, then the third (and so
+on), and finally considering the coordinate of the node itself as the least
+significant one.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">forecast</span><span class="o">.</span><span class="n">setProbabilities</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>After the network has been created we make it more spatially organized and
+change a few visual nodes&#8217; attributes.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Changing the nodes spacial and visual attributes:</span>
+<span class="n">success</span><span class="o">.</span><span class="n">setNodePosition</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">success</span><span class="o">.</span><span class="n">setInteriorColor</span><span class="p">(</span><span class="s">&#39;cc99ff&#39;</span><span class="p">)</span>
+
+<span class="n">forecast</span><span class="o">.</span><span class="n">setNodePosition</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">forecast</span><span class="o">.</span><span class="n">setInteriorColor</span><span class="p">(</span><span class="s">&#39;ff0000&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally we have to add the nodes to the network.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Add notes to network</span>
+<span class="n">net</span><span class="o">.</span><span class="n">addNodes</span><span class="p">([</span><span class="n">success</span><span class="p">,</span><span class="n">forecast</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Now we can store the network in a file called &#8220;tutorial.xdsl&#8221; so we can
+retrieve it later. The format of the file will be XDSL. If no file name is
+chosen, the network name will be used.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Write file</span>
+<span class="n">net</span><span class="o">.</span><span class="n">writeFile</span><span class="p">(</span><span class="s">&#39;tutorial.xdsl&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="finally">
+<h2>2.2. Finally...<a class="headerlink" href="#finally" title="Permalink to this headline">¶</a></h2>
+<p>This was a short introduction how to use <tt class="docutils literal"><span class="pre">py2GeNIe</span></tt>. The tutorial above is also
+available on <a class="reference external" href="https://github.com/hackl/py2GeNIe">GitHub</a> under <tt class="docutils literal"><span class="pre">example.py</span></tt>.</p>
+<p>If you like to learn more about <a class="reference external" href="http://genie.sis.pitt.edu/">GeNIe</a> visit <a class="reference external" href="http://genie.sis.pitt.edu/">http://genie.sis.pitt.edu/</a></p>
+<p>Let&#8217;s have fun ;)</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2. Tutorial</a><ul>
+<li><a class="reference internal" href="#creating-a-bayesian-network">2.1. Creating a Bayesian Network</a></li>
+<li><a class="reference internal" href="#finally">2.2. Finally...</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="README.html"
+                        title="previous chapter">1. Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="code.html"
+                        title="next chapter">3. Python Code</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="code.html" title="3. Python Code"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="README.html" title="1. Introduction"
+             >previous</a> |</li>
+        <li><a href="index.html">py2GeNIe 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Juergen Hackl.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
