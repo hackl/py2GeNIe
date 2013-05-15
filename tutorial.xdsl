@@ -22,14 +22,13 @@
 		</cpt>
 	</nodes>
 	<extensions>
-		<genie version="1.0" app="SMILE Jan 29 2013" name="Network" faultnameformat="nodestate">
+		<genie version="1.0" app="py2GeNIe 2013" name="Network" faultnameformat="nodestate">
 			<node id="Success">
 				<name>Success</name>
 				<interior color="cc99ff" />
 				<outline color="0000bb" />
 				<font color="000000" name="Arial" size="8" />
 				<position>50 10 175 75</position>
-				<barchart active="true" width="125" height="65" />
 			</node>
 			<node id="Forecast">
 				<name>Forecast</name>
@@ -37,7 +36,6 @@
 				<outline color="0000bb" />
 				<font color="000000" name="Arial" size="8" />
 				<position>50 150 175 215</position>
-				<barchart active="true" width="125" height="65" />
 			</node>
 		</genie>
 	</extensions>

@@ -9,32 +9,32 @@ from py2GeNIe import *
 def main():
 
   # Create a Network
-  net = GenieNetwork('Network')
+  net = Network('Network')
 
   # Create Node 'Success'
-  success = GenieNode('Success')
+  success = Node('Success')
 
   # Setting number (and name) of outcomes
   success.addOutcome('Success')
   success.addOutcome('Failure')
 
-  # Conditional distribution for node 'Success'
-  success.setProbability([0.1,0.9])
-
-
   # Create node 'Forecast'
-  forecast = GenieNode('Forecast')
+  forecast = Node('Forecast')
 
   # Setting number (and name) of outcomes
-  forecast.addOutcome('Good')
-  forecast.addOutcome('Moderate')
-  forecast.addOutcome('Poor')
+  forecast.addOutcomes(['Good','Moderate','Poor'])
 
   # Add arc from 'Success' to 'Forecast'
-  arc = GenieArc(success,forecast)
+  arc = Arc(success,forecast)
+
+  # Shows the size of the probability matrix
+  #print forecast.getTableSize()
+
+  # Conditional distribution for node 'Success'
+  success.setProbabilities([0.1,0.9])
 
   # Conditional distribution for node 'Forecast'
-  forecast.setProbability([0.4, 0.4, 0.2, 0.1, 0.3, 0.6])
+  forecast.setProbabilities([0.4, 0.4, 0.2, 0.1, 0.3, 0.6])
 
   # Changing the nodes spacial and visual attributes:
   success.setNodePosition(50,10)
