@@ -1,8 +1,9 @@
 #!/usr/bin/python -tt
 # -*- coding: utf-8 -*-
-# Time-stamp: <Wed 2013-05-15 11:30 juergen>
+# Time-stamp: <Tue 2013-08-06 12:00 juergen>
 
 import sys
+import gc
 
 class Network(object):
   """Bayesian Network
@@ -85,15 +86,15 @@ class Network(object):
       sys.exit("Error: No nodes connected to the network!")
     else:
       for node in self.nodes:
-        if node.getOutcomes() == []:
-          sys.exit("Error: Node '"+str(node)+"' has no outcomes!")
-        m,n = node.getTableSize()
-        nodeLen = m*n
-        if len(node.getProbabilities()) != nodeLen:
-          sys.exit("Error: Probabilities for '"+str(node)+"' doesn't match!\n       Len of probabilities should be "+str(nodeLen)+" but is "+str(len(node.getProbabilities())))
-        if sum(node.getProbabilities()) != n:
-          sys.exit("Error: Probabilities for '"+str(node)+"' doesn't sum up to 1.0!")
-
+        if not (isinstance(node, Decision) or isinstance(node, Utility)):
+          if node.getOutcomes() == []:
+            sys.exit("Error: Node '"+str(node)+"' has no outcomes!")
+          m,n = node.getTableSize()
+          nodeLen = m*n
+          if len(node.getProbabilities()) != nodeLen:
+            sys.exit("Error: Probabilities for '"+str(node)+"' doesn't match!\n       Len of probabilities should be "+str(nodeLen)+" but is "+str(len(node.getProbabilities())))
+          if sum(node.getProbabilities()) != n:
+            sys.exit("Error: Probabilities for '"+str(node)+"' doesn't sum up to 1.0!")
 
 class Node(object):
   """Node element for the Bayesian Network
@@ -182,7 +183,7 @@ class Node(object):
 
     :Args:
       - index (int): Position in the list of probabilities
-    
+
     :Returns:
       - probabilitiy (float): Returns a single probabilitiy out of the list of probabilities
     """
@@ -377,6 +378,98 @@ class Arc(object):
 
   def __repr__(self):
     return self.name
+
+
+
+class Decision(Node):
+  """Decision element for the Bayesian Network
+
+  :Attributes:
+    - name (str): Name of the node
+  """
+
+  def __init__(self, name):
+    self.name = name
+    Node.__init__(self,name)
+
+  def printNode(self):
+    # print node
+    commentNode = '\t\t<!-- create decision "'+self.caption+'" -->\n'
+    initNode = '\t\t<decision id="'+self.name+'" >\n'
+    commentOutcomes = '\t\t\t<!-- setting names of outcomes -->\n'
+    initOutcomes = ''
+    for outcomes in self.outcomes:
+      initOutcomes += '\t\t\t<state id="'+outcomes+'" />\n'
+
+    if self.arcConnection != []:
+      # print arc
+      commentArc = '\t\t\t<!-- add arcs -->\n'
+      initArc = '\t\t\t<parents>'
+      for i in range(len(self.arcConnection)):
+        initArc += self.arcConnection[i][0]+' '
+      endArc =  '</parents>\n'
+    else:
+      commentArc = ''
+      initArc = ''
+      endArc = ''
+
+    endNode = '\t\t</decision>\n'
+    print_node =  commentNode+initNode+commentOutcomes+initOutcomes+commentArc+initArc+endArc+endNode
+    return print_node
+
+class Utility(Node):
+  """Utility element for the Bayesian Network
+
+  :Attributes:
+    - name (str): Name of the node
+  """
+
+  def __init__(self, name):
+    self.name = name
+    Node.__init__(self,name)
+
+
+  def setUtilities(self,utilities):
+    """Set the utilities for the node
+
+    The order of these utilities is given by considering the state of the
+    first parent of the node as the most significant coordinate, then the
+    second parent, then the third (and so on), and finally considering the
+    coordinate of the node itself as the least significant one.
+
+    :Args:
+      - utilities (list): A list of utilities for the node
+    """
+    self.probabilities = utilities
+
+
+  def printNode(self):
+    # print node
+    commentNode = '\t\t<!-- create utility "'+self.caption+'" -->\n'
+    initNode = '\t\t<utility id="'+self.name+'" >\n'
+
+    if self.arcConnection != []:
+      # print arc
+      commentArc = '\t\t\t<!-- add arcs -->\n'
+      initArc = '\t\t\t<parents>'
+      for i in range(len(self.arcConnection)):
+        initArc += self.arcConnection[i][0]+' '
+      endArc =  '</parents>\n'
+    else:
+      commentArc = ''
+      initArc = ''
+      endArc = ''
+
+    # print probabilities
+    commentUtilities = '\t\t\t<!-- setting utilities -->\n'
+    initUtilities = '\t\t\t<utilities>'
+    for i,probability in enumerate(self.probabilities):
+      initUtilities += str(probability)+' '
+    endUtilities = '</utilities>\n'
+    endNode = '\t\t</utility>\n'
+    print_node =  commentNode+initNode+commentArc+initArc+endArc+commentUtilities+initUtilities+endUtilities+endNode
+    return print_node
+
 
 def repEmptySpace(string):
   return string.replace(' ', '_')

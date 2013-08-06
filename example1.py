@@ -47,7 +47,7 @@ def main():
   net.addNodes([success,forecast])
 
   # Write file
-  net.writeFile('tutorial.xdsl')
+  net.writeFile('tutorial1.xdsl')
 
 
   # This is the standard boilerplate that calls the main() function.

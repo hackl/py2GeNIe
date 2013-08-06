@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<smile version="1.0" id="Network" numsamples="1000" discsamples="10000">
+	<nodes>
+		<!-- create node "Success" -->
+		<cpt id="Success" >
+			<!-- setting names of outcomes -->
+			<state id="Success" />
+			<state id="Failure" />
+			<!-- setting probabilities -->
+			<probabilities>0.1 0.9 </probabilities>
+		</cpt>
+		<!-- create node "Forecast" -->
+		<cpt id="Forecast" >
+			<!-- setting names of outcomes -->
+			<state id="Good" />
+			<state id="Moderate" />
+			<state id="Poor" />
+			<!-- add arcs -->
+			<parents>Success </parents>
+			<!-- setting probabilities -->
+			<probabilities>0.4 0.4 0.2 0.1 0.3 0.6 </probabilities>
+		</cpt>
+		<!-- create decision "Invest" -->
+		<decision id="Invest" >
+			<!-- setting names of outcomes -->
+			<state id="Invest" />
+			<state id="DonotInvest" />
+		</decision>
+		<!-- create utility "Gain" -->
+		<utility id="Gain" >
+			<!-- add arcs -->
+			<parents>Success Invest </parents>
+			<!-- setting utilities -->
+			<utilities>10000 500 -5000 500 </utilities>
+		</utility>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="py2GeNIe 2013" name="Network" faultnameformat="nodestate">
+			<node id="Success">
+				<name>Success</name>
+				<interior color="ff9900" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>250 10 375 75</position>
+			</node>
+			<node id="Forecast">
+				<name>Forecast</name>
+				<interior color="ff99cc" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>250 150 375 215</position>
+			</node>
+			<node id="Invest">
+				<name>Invest</name>
+				<interior color="c0c0c0" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>50 10 175 75</position>
+			</node>
+			<node id="Gain">
+				<name>Gain</name>
+				<interior color="99ccff" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>50 150 175 215</position>
+			</node>
+		</genie>
+	</extensions>
+</smile>
